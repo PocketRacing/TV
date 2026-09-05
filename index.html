@@ -3,1116 +3,1749 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>STORYVERSE — Генератор историй</title>
+<title>STORYVERSE — Infinite Story Generator</title>
+
 <style>
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;background:#08090d;color:#f4f5f7;font-family:Arial,Helvetica,sans-serif}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;background:#080a0f;color:#eee;font-family:Arial,Helvetica,sans-serif}
 button,input,select{font:inherit}
 button{cursor:pointer;border:0}
 body{overflow-x:hidden}
 
-:root{
-  --bg:#08090d;
-  --panel:#10131b;
-  --panel2:#151925;
-  --line:#272c3b;
-  --text:#f4f5f7;
-  --muted:#8d94a7;
-  --accent:#8b6cff;
-  --accent2:#b39cff;
+.app{min-height:100vh;background:
+radial-gradient(circle at 20% 0%,#202743 0,transparent 35%),
+radial-gradient(circle at 90% 20%,#321b35 0,transparent 30%),
+#080a0f}
+
+header{
+height:68px;display:flex;align-items:center;justify-content:space-between;
+padding:0 22px;border-bottom:1px solid #262a38;
+background:rgba(8,10,15,.82);backdrop-filter:blur(18px);
+position:sticky;top:0;z-index:20
 }
 
-.app{max-width:1400px;margin:auto;min-height:100vh}
-.top{
-  position:sticky;top:0;z-index:20;
-  height:70px;padding:0 20px;
-  display:flex;align-items:center;justify-content:space-between;
-  background:rgba(8,9,13,.92);backdrop-filter:blur(18px);
-  border-bottom:1px solid var(--line)
-}
-.logo{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:1px}
-.logoIcon{
-  width:40px;height:40px;border-radius:12px;
-  display:grid;place-items:center;background:linear-gradient(135deg,#8b6cff,#3c8dff);
-  font-size:21px;box-shadow:0 0 30px rgba(139,108,255,.25)
-}
-.topBtns{display:flex;gap:8px}
+.logo{font-size:22px;font-weight:900;letter-spacing:3px}
+.logo span{color:#8b7cff}
+
+.headerBtns{display:flex;gap:8px}
 .iconBtn{
-  background:#151925;color:#fff;border:1px solid var(--line);
-  border-radius:12px;padding:10px 13px
+width:42px;height:42px;border-radius:12px;background:#171b27;color:#fff;
+font-size:19px
 }
 
-.layout{display:grid;grid-template-columns:230px 1fr}
-.side{
-  border-right:1px solid var(--line);min-height:calc(100vh - 70px);
-  padding:18px 12px;position:sticky;top:70px;height:calc(100vh - 70px)
+.layout{display:flex;min-height:calc(100vh - 68px)}
+aside{
+width:230px;border-right:1px solid #252936;padding:18px 12px;
+background:rgba(7,9,14,.65)
 }
 .nav{
-  width:100%;display:flex;align-items:center;gap:12px;
-  padding:13px 14px;margin-bottom:5px;border-radius:12px;
-  background:transparent;color:#aeb4c5;text-align:left
+width:100%;text-align:left;padding:14px 15px;margin-bottom:6px;
+border-radius:12px;background:transparent;color:#9ba1b2
 }
-.nav:hover,.nav.active{background:#171b27;color:#fff}
-.nav.active{box-shadow:inset 3px 0 0 var(--accent)}
+.nav.active,.nav:hover{background:#1a1e2b;color:#fff}
+.nav b{margin-right:9px}
 
-.main{padding:24px;min-width:0}
-.page{display:none}
+main{flex:1;padding:24px;min-width:0}
+.page{display:none;max-width:1250px;margin:auto}
 .page.active{display:block}
 
 .hero{
-  min-height:330px;border:1px solid var(--line);border-radius:24px;
-  padding:38px;position:relative;overflow:hidden;
-  background:
-    radial-gradient(circle at 80% 20%,rgba(139,108,255,.23),transparent 30%),
-    radial-gradient(circle at 15% 90%,rgba(60,141,255,.13),transparent 30%),
-    #0e1119
+padding:28px;border:1px solid #2a2e3c;border-radius:24px;
+background:linear-gradient(135deg,rgba(25,29,43,.95),rgba(13,15,22,.94));
+box-shadow:0 25px 80px rgba(0,0,0,.25)
 }
-.hero:after{
-  content:"";position:absolute;inset:auto -100px -160px auto;
-  width:420px;height:420px;border-radius:50%;
-  background:rgba(139,108,255,.08);filter:blur(10px)
-}
-.kicker{color:#a996ff;font-size:13px;font-weight:bold;letter-spacing:2px;text-transform:uppercase}
-h1{font-size:clamp(36px,6vw,72px);line-height:.95;margin:16px 0}
-.hero p{max-width:680px;color:#9ca3b6;font-size:17px;line-height:1.6}
-.bigGenerate{
-  margin-top:22px;padding:17px 25px;border-radius:14px;
-  background:linear-gradient(135deg,#8b6cff,#5f86ff);
-  color:white;font-weight:900;font-size:16px;
-  box-shadow:0 10px 40px rgba(108,91,255,.22)
-}
-.bigGenerate:active{transform:scale(.98)}
+.hero h1{font-size:42px;margin:0 0 10px}
+.hero p{color:#9ea5b8;line-height:1.6;max-width:800px}
 
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
-.card{
-  background:var(--panel);border:1px solid var(--line);border-radius:18px;
-  padding:18px
+.controls{
+display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:22px
 }
-.card h3{margin:0 0 7px}
-.muted{color:var(--muted)}
-.stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-.pill{
-  border:1px solid var(--line);background:#151925;border-radius:999px;
-  padding:7px 10px;color:#c5cad7;font-size:12px
+.control{
+background:#10131c;border:1px solid #282c3b;border-radius:15px;padding:14px
+}
+.control label{display:block;color:#858ca0;font-size:12px;margin-bottom:8px}
+select,input{
+width:100%;background:#181c27;color:#fff;border:1px solid #303546;
+border-radius:10px;padding:11px;outline:0
 }
 
-.sectionTitle{font-size:26px;margin:0 0 18px}
-.toolbar{
-  display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px
+.genreGrid{
+display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:12px
 }
-.btn{
-  padding:11px 14px;border-radius:11px;background:#171b27;color:#fff;
-  border:1px solid var(--line)
-}
-.btn.primary{background:var(--accent);border-color:var(--accent)}
-.btn.danger{background:#32171d;border-color:#57242e}
-.btn.small{padding:8px 10px;font-size:12px}
-
-.generator{
-  display:grid;grid-template-columns:300px 1fr;gap:18px
-}
-.controls{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px}
-.field{margin-bottom:15px}
-.field label{display:block;color:#aeb4c5;font-size:12px;margin-bottom:7px}
-.field select,.field input{
-  width:100%;padding:12px;border-radius:11px;border:1px solid var(--line);
-  background:#0c0f16;color:#fff;outline:0
-}
-.checks{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .genre{
-  padding:9px 8px;border:1px solid var(--line);border-radius:10px;
-  background:#0d1017;color:#aeb4c5;font-size:12px;text-align:center
+padding:10px 6px;border-radius:10px;background:#151925;color:#aab0c0;
+border:1px solid #282d3b;font-size:12px
 }
-.genre.on{background:#211b38;border-color:#755de0;color:#fff}
+.genre.active{background:#302b61;color:#fff;border-color:#7165d8}
 
-.result{
-  background:var(--panel);border:1px solid var(--line);border-radius:20px;
-  overflow:hidden;min-width:0
+.generate{
+margin-top:18px;width:100%;padding:17px;border-radius:15px;
+background:linear-gradient(90deg,#6658dc,#9a59d8);color:#fff;
+font-size:17px;font-weight:800
 }
-.resultHead{padding:22px;border-bottom:1px solid var(--line)}
-.title{font-size:34px;font-weight:900;margin:0 0 9px}
-.resultBody{padding:22px}
-.storyText{color:#c1c6d3;line-height:1.7;white-space:pre-wrap}
-.tags{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
+.generate:active{transform:scale(.99)}
 
-.scenes{display:grid;gap:10px}
+.storyBox{
+margin-top:20px;display:none
+}
+.storyHead{
+display:flex;justify-content:space-between;align-items:flex-start;gap:15px;
+margin-bottom:15px
+}
+.storyTitle{font-size:30px;font-weight:900}
+.meta{color:#858ca0;font-size:13px;margin-top:5px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.action{
+padding:11px 14px;border-radius:10px;background:#191d28;color:#fff
+}
+.action.save{background:#5147a9}
+.action.danger{background:#632d36}
+
+.summary{
+padding:18px;border:1px solid #292e3d;border-radius:16px;
+background:#11141d;color:#c6cad5;line-height:1.7
+}
+
+.characters{
+display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:15px
+}
+.char{
+padding:15px;border-radius:15px;background:#11141d;border:1px solid #292e3d
+}
+.avatar{
+height:80px;border-radius:12px;background:
+linear-gradient(135deg,#252a3a,#151823);
+display:flex;align-items:center;justify-content:center;
+font-size:40px;margin-bottom:10px
+}
+.char strong{display:block;font-size:16px}
+.char small{display:block;color:#858ca0;margin-top:4px;line-height:1.45}
+
+.scenes{margin-top:20px}
 .scene{
-  display:grid;grid-template-columns:55px 1fr auto;gap:13px;
-  align-items:center;padding:13px;border:1px solid var(--line);
-  background:#0d1017;border-radius:13px
+display:grid;grid-template-columns:65px 1fr;gap:12px;margin-bottom:10px;
+padding:14px;border:1px solid #292e3d;background:#10131b;border-radius:15px
 }
-.sceneNum{font-size:22px;font-weight:900;color:#7563cc}
-.scene h4{margin:0 0 5px}.scene p{margin:0;color:#8f96a8;font-size:13px}
-.scene button{background:#171b27;color:white;border:1px solid var(--line);padding:8px;border-radius:9px}
-
-.characters{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.char{padding:14px;border:1px solid var(--line);background:#0d1017;border-radius:13px}
-.char strong{display:block;margin-bottom:5px}.char span{color:#8f96a8;font-size:13px}
+.sceneNum{
+width:45px;height:45px;border-radius:12px;background:#222738;
+display:flex;align-items:center;justify-content:center;font-weight:900
+}
+.scene h3{margin:0 0 6px}
+.scene p{margin:0;color:#aeb4c2;line-height:1.55}
+.scene .dialogue{margin-top:9px;color:#d7d9e2;font-style:italic}
 
 .player{
-  background:#050608;border:1px solid var(--line);border-radius:20px;overflow:hidden
+margin-top:22px;background:#030407;border:1px solid #282c38;
+border-radius:18px;overflow:hidden;position:relative
 }
-.canvasWrap{aspect-ratio:16/9;position:relative;background:#050608}
-canvas{width:100%;height:100%;display:block}
-.playerBar{padding:13px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#0d1017}
-.progress{flex:1;min-width:120px;height:6px;background:#282c38;border-radius:20px;overflow:hidden}
-.progress i{display:block;height:100%;width:0;background:#9a83ff}
-.sceneInfo{padding:18px;border-top:1px solid var(--line)}
-.sceneInfo h2{margin:0 0 7px}.sceneInfo p{color:#9ca3b6;line-height:1.5}
+canvas{display:block;width:100%;height:auto;background:#05070a}
+.playerBar{
+display:flex;align-items:center;gap:8px;padding:10px;background:#0e1118
+}
+.playerBar button{background:#191d28;color:#fff;border-radius:9px;padding:9px 13px}
+.progress{flex:1;height:5px;background:#292e3a;border-radius:9px;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:#8879ff}
 
-.historyGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
-.historyCard{
-  background:var(--panel);border:1px solid var(--line);border-radius:17px;
-  padding:17px;display:flex;flex-direction:column;min-height:180px
+.historyGrid{
+display:grid;grid-template-columns:repeat(3,1fr);gap:12px
 }
-.historyCard h3{margin:0 0 8px}.historyCard p{color:#9097a9;font-size:13px;line-height:1.5;flex:1}
-.actions{display:flex;gap:7px;flex-wrap:wrap}
+.historyCard{
+padding:16px;background:#11141c;border:1px solid #292e3b;border-radius:15px
+}
+.historyCard h3{margin:0 0 8px}
+.historyCard p{color:#8e95a6;font-size:13px;line-height:1.5}
+.historyBtns{display:flex;gap:7px;margin-top:10px}
+.historyBtns button{padding:8px 10px;border-radius:8px;background:#1d2130;color:#fff}
 
 .empty{
-  text-align:center;padding:60px 20px;border:1px dashed var(--line);
-  border-radius:18px;color:#777f92
+padding:50px;text-align:center;color:#72798b;border:1px dashed #303545;
+border-radius:18px
 }
-
-.modal{
-  display:none;position:fixed;inset:0;z-index:100;
-  background:rgba(0,0,0,.72);backdrop-filter:blur(10px);
-  align-items:center;justify-content:center;padding:20px
-}
-.modal.show{display:flex}
-.modalBox{
-  width:min(600px,100%);max-height:90vh;overflow:auto;
-  background:#11141d;border:1px solid var(--line);border-radius:20px;padding:22px
-}
-.modalBox h2{margin-top:0}
-.progressBig{height:9px;background:#252936;border-radius:20px;overflow:hidden;margin:18px 0}
-.progressBig i{display:block;width:0;height:100%;background:linear-gradient(90deg,#8b6cff,#5e91ff)}
-.genStatus{color:#a9afc0;font-size:13px}
 
 .toast{
-  position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);
-  background:#171b27;border:1px solid #353b4d;padding:12px 16px;border-radius:12px;
-  opacity:0;pointer-events:none;transition:.25s;z-index:200
+position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);
+background:#171b27;color:#fff;padding:12px 18px;border-radius:12px;
+border:1px solid #343949;transition:.3s;z-index:100
 }
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.show{transform:translateX(-50%) translateY(0)}
 
 @media(max-width:900px){
-  .layout{grid-template-columns:1fr}
-  .side{
-    position:fixed;z-index:30;left:0;right:0;bottom:0;top:auto;height:auto;
-    min-height:0;border-right:0;border-top:1px solid var(--line);
-    background:rgba(8,9,13,.96);padding:7px;display:flex;justify-content:space-around
-  }
-  .nav{justify-content:center;padding:11px 7px;margin:0;width:auto;flex:1;font-size:0}
-  .nav span{font-size:21px}
-  .main{padding:16px 16px 88px}
-  .generator{grid-template-columns:1fr}
-  .historyGrid,.grid{grid-template-columns:1fr}
-  .characters{grid-template-columns:1fr}
-  .hero{padding:25px;min-height:300px}
-  .top{height:62px}
+aside{width:75px}
+.nav span{display:none}
+.nav{text-align:center}
+.controls{grid-template-columns:repeat(2,1fr)}
+.genreGrid{grid-template-columns:repeat(4,1fr)}
+.characters{grid-template-columns:repeat(2,1fr)}
+.historyGrid{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:600px){
+header{padding:0 12px}
+.logo{font-size:17px}
+.layout{display:block}
+aside{
+position:fixed;bottom:0;left:0;right:0;width:100%;height:64px;
+z-index:50;display:flex;padding:5px;background:#0c0f16;
+border-top:1px solid #292d3a;border-right:0
+}
+.nav{flex:1;margin:0;padding:8px 3px;font-size:10px;text-align:center}
+.nav b{display:block;margin:0 0 3px;font-size:17px}
+.nav span{display:block}
+main{padding:12px 12px 80px}
+.hero{padding:18px;border-radius:18px}
+.hero h1{font-size:29px}
+.controls{grid-template-columns:1fr}
+.genreGrid{grid-template-columns:repeat(3,1fr)}
+.characters{grid-template-columns:1fr 1fr}
+.storyTitle{font-size:23px}
+.storyHead{display:block}
+.actions{margin-top:12px}
+.scene{grid-template-columns:45px 1fr}
+canvas{min-height:210px}
+}
+
+@media(max-width:390px){
+.characters{grid-template-columns:1fr}
+.genreGrid{grid-template-columns:repeat(2,1fr)}
 }
 </style>
 </head>
-<body>
 
+<body>
 <div class="app">
-<header class="top">
-  <div class="logo">
-    <div class="logoIcon">🎬</div>
-    <div>STORYVERSE</div>
-  </div>
-  <div class="topBtns">
-    <button class="iconBtn" onclick="showPage('history')">📚 <span id="historyCount">0</span></button>
-    <button class="iconBtn" onclick="showToast('STORYVERSE работает локально в браузере')">ⓘ</button>
-  </div>
+
+<header>
+<div class="logo">STORY<span>VERSE</span></div>
+<div class="headerBtns">
+<button class="iconBtn" onclick="newStory()">✦</button>
+<button class="iconBtn" onclick="showPage('history')">☰</button>
+</div>
 </header>
 
 <div class="layout">
 
-<aside class="side">
-  <button class="nav active" data-page="home" onclick="showPage('home')"><span>🏠</span> Главная</button>
-  <button class="nav" data-page="generator" onclick="showPage('generator')"><span>✨</span> Генератор</button>
-  <button class="nav" data-page="history" onclick="showPage('history')"><span>📚</span> История</button>
-  <button class="nav" data-page="player" onclick="showPage('player')"><span>🎞️</span> Плеер</button>
+<aside>
+<button class="nav active" data-page="generator" onclick="showPage('generator')">
+<b>🎬</b><span>Генератор</span>
+</button>
+<button class="nav" data-page="history" onclick="showPage('history')">
+<b>📚</b><span>Истории</span>
+</button>
+<button class="nav" data-page="player" onclick="showPage('player')">
+<b>▶️</b><span>Плеер</span>
+</button>
 </aside>
 
-<main class="main">
+<main>
 
-<section id="page-home" class="page active">
-  <div class="hero">
-    <div class="kicker">Procedural Story Engine</div>
-    <h1>Создай<br>свою историю.</h1>
-    <p>
-      Фильмы, мультфильмы, сериалы и короткие истории.
-      Сюжет, персонажи, сцены, мир и визуальная анимация создаются автоматически.
-    </p>
-    <button class="bigGenerate" onclick="randomGenerate()">✨ СОЗДАТЬ СЛУЧАЙНУЮ ИСТОРИЮ</button>
-  </div>
+<section id="generator" class="page active">
 
-  <div class="grid">
-    <div class="card"><h3>♾️ Огромный рандом</h3><div class="muted">Миллионы и миллиарды комбинаций сюжетных элементов.</div></div>
-    <div class="card"><h3>📚 История</h3><div class="muted">Сохранённые произведения остаются в браузере.</div></div>
-    <div class="card"><h3>🚫 Анти-повтор</h3><div class="muted">Сохранённые сюжеты используются для проверки новых генераций.</div></div>
-  </div>
+<div class="hero">
+<h1>Бесконечный генератор историй</h1>
+<p>
+Создавай разные фильмы, мультфильмы и сериалы.
+Сюжет строится из событий, персонажей, отношений, конфликтов,
+локаций и последствий предыдущих сцен.
+</p>
+
+<div class="controls">
+
+<div class="control">
+<label>Формат</label>
+<select id="type">
+<option>Фильм</option>
+<option>Мультфильм</option>
+<option>Сериал</option>
+<option>Короткометражка</option>
+</select>
+</div>
+
+<div class="control">
+<label>Количество сцен</label>
+<select id="sceneCount">
+<option value="6">6</option>
+<option value="8" selected>8</option>
+<option value="10">10</option>
+<option value="12">12</option>
+<option value="15">15</option>
+</select>
+</div>
+
+<div class="control">
+<label>Количество персонажей</label>
+<select id="charCount">
+<option value="3">3</option>
+<option value="4" selected>4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="8">8</option>
+</select>
+</div>
+
+<div class="control">
+<label>Настроение</label>
+<select id="mood">
+<option>Случайное</option>
+<option>Мрачное</option>
+<option>Весёлое</option>
+<option>Напряжённое</option>
+<option>Эпическое</option>
+<option>Романтическое</option>
+</select>
+</div>
+
+</div>
+
+<div style="margin-top:18px;color:#858ca0;font-size:12px">
+ЖАНР
+</div>
+
+<div class="genreGrid" id="genres"></div>
+
+<button class="generate" onclick="generateStory()">⚡ СОЗДАТЬ НОВУЮ ИСТОРИЮ</button>
+</div>
+
+<div id="storyBox" class="storyBox">
+
+<div class="storyHead">
+<div>
+<div class="storyTitle" id="storyTitle"></div>
+<div class="meta" id="storyMeta"></div>
+</div>
+
+<div class="actions">
+<button class="action" onclick="generateStory()">🎲 Новый</button>
+<button class="action save" onclick="saveCurrent()">💾 Сохранить</button>
+<button class="action" onclick="openPlayer()">▶ Смотреть</button>
+</div>
+</div>
+
+<div class="summary" id="summary"></div>
+
+<h2>Персонажи</h2>
+<div class="characters" id="characters"></div>
+
+<h2>Сценарий</h2>
+<div class="scenes" id="scenes"></div>
+
+<div class="player">
+<canvas id="canvas" width="960" height="540"></canvas>
+
+<div class="playerBar">
+<button onclick="togglePlay()" id="playBtn">▶</button>
+<button onclick="prevScene()">◀</button>
+<button onclick="nextScene()">▶</button>
+<div class="progress"><i id="progress"></i></div>
+<button onclick="toggleVoice()" id="voiceBtn">🔊</button>
+</div>
+</div>
+
+</div>
 </section>
 
-<section id="page-generator" class="page">
-  <h2 class="sectionTitle">✨ Генератор</h2>
-
-  <div class="generator">
-    <div class="controls">
-      <div class="field">
-        <label>ТИП ПРОИЗВЕДЕНИЯ</label>
-        <select id="type">
-          <option>Фильм</option>
-          <option>Мультфильм</option>
-          <option>Сериал</option>
-          <option>Короткометражка</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>РЕЖИМ</label>
-        <select id="mode">
-          <option value="random">Полный рандом</option>
-          <option value="selected">Выбранные жанры</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>ЖАНРЫ — можно несколько</label>
-        <div class="checks" id="genres"></div>
-      </div>
-
-      <div class="field">
-        <label>КОЛИЧЕСТВО СЦЕН</label>
-        <input id="sceneCount" type="number" min="8" max="40" value="18">
-      </div>
-
-      <button class="btn primary" style="width:100%;padding:14px" onclick="generate()">⚡ СГЕНЕРИРОВАТЬ</button>
-    </div>
-
-    <div class="result" id="result">
-      <div class="empty">
-        <div style="font-size:45px">🎬</div>
-        <h3>История ещё не создана</h3>
-        <p>Настрой параметры и нажми «Сгенерировать».</p>
-      </div>
-    </div>
-  </div>
+<section id="history" class="page">
+<div class="hero">
+<h1>Сохранённые истории</h1>
+<p>Здесь находятся только истории, которые ты сохранил вручную.</p>
+<div class="actions">
+<button class="action danger" onclick="clearHistory()">🗑 Очистить всё</button>
+</div>
+</div>
+<br>
+<div id="historyGrid" class="historyGrid"></div>
 </section>
 
-<section id="page-history" class="page">
-  <h2 class="sectionTitle">📚 История</h2>
-  <div class="toolbar">
-    <button class="btn" onclick="filterHistory('all')">Все</button>
-    <button class="btn" onclick="filterHistory('fav')">⭐ Избранное</button>
-    <button class="btn" onclick="exportHistory()">📤 Экспорт</button>
-    <button class="btn" onclick="document.getElementById('importFile').click()">📥 Импорт</button>
-    <button class="btn danger" onclick="clearHistory()">🗑️ Очистить</button>
-    <input id="importFile" type="file" accept=".json" style="display:none" onchange="importHistory(event)">
-  </div>
-  <div id="historyGrid" class="historyGrid"></div>
-</section>
-
-<section id="page-player" class="page">
-  <h2 class="sectionTitle">🎞️ Просмотр</h2>
-  <div id="playerEmpty" class="empty">Сначала создай историю.</div>
-  <div id="playerBox" class="player" style="display:none">
-    <div class="canvasWrap"><canvas id="canvas" width="1280" height="720"></canvas></div>
-    <div class="playerBar">
-      <button class="btn" onclick="prevScene()">⏮</button>
-      <button class="btn primary" id="playBtn" onclick="togglePlay()">▶️</button>
-      <button class="btn" onclick="nextScene()">⏭</button>
-      <div class="progress"><i id="progress"></i></div>
-      <span id="sceneCounter" class="muted">1/1</span>
-      <button class="btn" onclick="toggleSound()">🔊</button>
-    </div>
-    <div class="sceneInfo">
-      <h2 id="playerSceneTitle"></h2>
-      <p id="playerSceneText"></p>
-    </div>
-  </div>
+<section id="player" class="page">
+<div class="hero">
+<h1>Киноплеер</h1>
+<p id="playerInfo">Сначала создай историю.</p>
+<div class="player">
+<canvas id="canvas2" width="960" height="540"></canvas>
+<div class="playerBar">
+<button onclick="togglePlay()">▶</button>
+<button onclick="prevScene()">◀</button>
+<button onclick="nextScene()">▶</button>
+<div class="progress"><i id="progress2"></i></div>
+<button onclick="toggleVoice()">🔊</button>
+</div>
+</div>
+</div>
 </section>
 
 </main>
 </div>
 </div>
 
-<div class="modal" id="genModal">
-  <div class="modalBox">
-    <h2>✨ Создаём историю</h2>
-    <div class="progressBig"><i id="genProgress"></i></div>
-    <div class="genStatus" id="genStatus">Запускаем генератор...</div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
+<div id="toast" class="toast"></div>
 
 <script>
-"use strict";
+/* =========================================================
+   STORYVERSE
+   ========================================================= */
 
-/* =========================
-   STORYVERSE ENGINE
-========================= */
-
-const GENRES=[
- "Боевик","Приключения","Комедия","Ужасы","Триллер",
- "Детектив","Фантастика","Фэнтези","Драма","Мелодрама",
- "Криминал","Постапокалипсис","Военный","Мистика",
- "Научная фантастика","Семейный"
-];
-
-const worlds=[
- "огромный современный мегаполис",
- "заброшенный северный город",
- "далёкая космическая колония",
- "маленький приморский город",
- "мир после глобальной катастрофы",
- "таинственный лес, которого нет ни на одной карте",
- "альтернативная Европа",
- "огромный подземный комплекс",
- "город будущего",
- "старый промышленный район",
- "остров, отрезанный от остального мира",
- "пустынная территория вокруг заброшенной станции",
- "мир, где ночь длится несколько месяцев",
- "город, построенный внутри гигантской стены",
- "параллельная реальность"
-];
-
-const times=[
- "сейчас","через десять лет","через сто лет",
- "в недалёком будущем","в альтернативных 1990-х",
- "после неизвестного глобального события",
- "в эпоху технологического расцвета",
- "в мире, где история пошла другим путём"
-];
+const genres={
+"Хоррор":{
+icon:"👻",
+structures:[
+["изоляция","исчезновение","расследование","первое столкновение","погоня","страшное открытие","последняя попытка","неожиданная развязка"],
+["странный сигнал","прибытие","первые странности","пропажа человека","поиск","раскрытие тайны","ловушка","финал"],
+["запретное место","нарушение правила","появление угрозы","разделение группы","выжившие ищут выход","предательство","последняя ночь","рассвет"]
+]},
+"Детектив":{
+icon:"🔎",
+structures:[
+["преступление","осмотр места","первичная улика","опрос подозреваемых","ложный след","новая улика","разоблачение","арест"],
+["исчезновение","поиск свидетеля","тайная связь","противоречие","подмена улики","ловушка","признание","развязка"],
+["загадка","цепочка подсказок","первый подозреваемый","неожиданный свидетель","ошибка героя","истинный мотив","разоблачение","последний вопрос"]
+]},
+"Комедия":{
+icon:"😂",
+structures:[
+["обычная жизнь","случайная ошибка","недоразумение","проблема растёт","катастрофа","попытка исправить","ещё большая ошибка","смешной финал"],
+["странное знакомство","неудачное решение","ложь","ложь становится больше","все всё понимают неправильно","хаос","признание","счастливый финал"],
+["план","плохое исполнение","случайная удача","новая проблема","паника","импровизация","полный беспорядок","неожиданный успех"]
+]},
+"Боевик":{
+icon:"💥",
+structures:[
+["задание","подготовка","первая атака","погоня","предательство","перелом","финальная операция","битва"],
+["нападение","спасение","преследование","засада","потеря союзника","возвращение","штурм","финальный бой"],
+["цель","путь к цели","противник","ловушка","провал","новый план","последняя атака","победа"]
+]},
+"Фантастика":{
+icon:"🚀",
+structures:[
+["аномалия","исследование","контакт","эксперимент","последствие","раскрытие природы","выбор","новый мир"],
+["необычная находка","изучение","пробуждение","побег","изменение мира","союз","последняя попытка","открытие"],
+["сигнал из будущего","предупреждение","изменение настоящего","парадокс","распад реальности","решение","жертва","новая временная линия"]
+]},
+"Фэнтези":{
+icon:"🐉",
+structures:[
+["призвание","получение задания","путешествие","первое испытание","древний враг","битва","последний выбор","возвращение"],
+["древний артефакт","пробуждение силы","охота врагов","союз","путь","предательство","финальная битва","новая эпоха"],
+["пророчество","отказ героя","угроза","поход","тайна происхождения","битва","жертва","легенда"]
+]},
+"Драма":{
+icon:"🎭",
+structures:[
+["обычная жизнь","личный конфликт","разговор","старое прошлое","разрыв","осознание","сложный выбор","новое начало"],
+["встреча","сближение","конфликт","ошибка","последствия","попытка исправить","решающий разговор","финал"],
+["секрет","давление","раскрытие","ссора","одиночество","переоценка","возвращение","решение"]
+]},
+"Романтика":{
+icon:"❤️",
+structures:[
+["знакомство","интерес","сближение","первое препятствие","недоразумение","разлука","признание","встреча"],
+["случайная встреча","общая тайна","симпатия","третья сторона","ссора","осознание чувств","признание","финал"],
+["дружба","новое чувство","сомнения","конфликт","расстояние","возвращение","честный разговор","выбор"]
+]},
+"Постапокалипсис":{
+icon:"☢️",
+structures:[
+["выживание","поиск ресурсов","следы людей","опасная территория","конфликт группы","неожиданный враг","последний ресурс","новый путь"],
+["разрушенный город","убежище","нехватка еды","поход","засада","потеря","спасение","новое поселение"],
+["сигнал","поиск источника","заражённая зона","выжившие","разногласия","атака","решение","рассвет"]
+]},
+"Триллер":{
+icon:"🕵️",
+structures:[
+["подозрение","наблюдение","тайная встреча","угроза","побег","секрет","ловушка","твист"],
+["странное событие","проверка","преследование","паранойя","ошибка","раскрытие","захват","переворот"],
+["сообщение","расследование","ложный союзник","опасность","тайна","погоня","правда","неожиданный финал"]
+]},
+"Криминал":{
+icon:"💰",
+structures:[
+["сделка","подготовка","ограбление","побег","предательство","раздел добычи","охота","финал"],
+["долг","предложение","план","выполнение","ошибка","преследование","выбор","последствия"],
+["встреча","сговор","тайная операция","двойная игра","разоблачение","побег","последний шанс","расплата"]
+]},
+"Военный":{
+icon:"⚔️",
+structures:[
+["приказ","подготовка","выдвижение","бой","потери","контратака","последняя задача","возвращение"],
+["разведка","обнаружение врага","засада","отступление","перегруппировка","штурм","перелом","последствия"],
+["миссия","путь","контакт","бой","разделение отряда","выживание","эвакуация","последний кадр"]
+]},
+"Мистика":{
+icon:"🔮",
+structures:[
+["знак","исследование","странное совпадение","видение","тайна","контакт","ритуал","открытие"],
+["сон","повторяющийся символ","поиск ответа","старый дом","голоса","история прошлого","встреча","развязка"],
+["находка","аномалия","изменение реальности","поиск причины","древняя история","контакт","выбор","финал"]
+]}
+};
 
 const firstNames=[
- "Алекс","Макс","Даниэль","Илья","Марк","Леон","Артур","Ник",
- "Томас","Виктор","Егор","Роман","Лука","Михаил","Дамир","Саша",
- "Анна","Лера","Мия","Эва","Ника","Алиса","София","Кира","Елена"
+"Алексей","Максим","Илья","Даниил","Артём","Михаил","Роман","Егор",
+"Никита","Кирилл","Виктор","Антон","Сергей","Иван","Дмитрий","Олег",
+"Мария","Анна","Елена","София","Вера","Лиза","Полина","Алина"
 ];
 
 const surnames=[
- "Волков","Орлов","Соколов","Морозов","Крылов","Белов","Романов",
- "Громов","Лебедев","Воронцов","Климов","Зорин","Никитин","Карпов",
- "Северин","Ланской"
+"Волков","Орлов","Соколов","Морозов","Крылов","Лебедев","Зорин",
+"Громов","Белов","Ковалёв","Романов","Серов","Власов","Тихонов"
 ];
 
 const professions=[
- "архивист","механик","журналист","следователь","пилот",
- "врач","инженер","спасатель","программист","фотограф",
- "музыкант","военный","курьер","учёный","детектив","водитель",
- "исследователь","оператор связи","владелец маленького бара"
+"журналист","врач","инженер","детектив","механик","учёный",
+"полицейский","водитель","археолог","программист","военный",
+"фотограф","студент","пилот","следователь","музыкант"
 ];
 
 const traits=[
- "недоверчивый, но наблюдательный",
- "спокойный под давлением",
- "импульсивный и смелый",
- "замкнутый, но очень умный",
- "ироничный и находчивый",
- "честный до неприятности",
- "осторожный и расчётливый",
- "упрямый и решительный",
- "мечтательный и любопытный",
- "хладнокровный и загадочный"
+"смелый","подозрительный","ироничный","молчаливый","импульсивный",
+"расчётливый","добрый","упрямый","осторожный","любопытный",
+"холодный","идеалистичный","нервный","харизматичный"
 ];
 
 const goals=[
- "найти пропавшего человека",
- "раскрыть старую тайну",
- "добраться до запретного места",
- "выяснить правду о собственном прошлом",
- "остановить опасный проект",
- "спасти близкого человека",
- "найти источник загадочного сигнала",
- "вернуть украденный предмет",
- "выжить до рассвета",
- "доказать, что официальная версия событий ложна",
- "предотвратить катастрофу",
- "понять, почему люди начали исчезать"
-];
-
-const threats=[
- "таинственная организация",
- "неизвестный преследователь",
- "вооружённая группа",
- "система, которая контролирует город",
- "аномальное явление",
- "человек, которому герой когда-то доверял",
- "неизвестная форма жизни",
- "старый эксперимент",
- "цепочка случайностей, которая оказывается совсем не случайной",
- "человек из прошлого героя"
+"найти пропавшего человека",
+"узнать правду",
+"спасти близкого",
+"выбраться из опасного места",
+"раскрыть тайну",
+"завершить последнее задание",
+"найти источник сигнала",
+"вернуть украденную вещь",
+"исправить старую ошибку",
+"остановить неизвестную угрозу",
+"доказать свою невиновность",
+"добраться до безопасного места"
 ];
 
 const locations=[
- "заброшенная станция",
- "ночной вокзал",
- "старый кинотеатр",
- "подземный тоннель",
- "крыша высотного здания",
- "лесная дорога",
- "закрытая лаборатория",
- "порт",
- "старый жилой дом",
- "пустой торговый центр",
- "военный объект",
- "неизвестная комната без окон",
- "маленькая придорожная гостиница",
- "архив",
- "метро"
+"заброшенный город","ночной вокзал","старый отель","лесная дорога",
+"подземная лаборатория","порт","небольшой городок","горный посёлок",
+"заснеженная станция","старый особняк","пустынное шоссе","метро",
+"военная база","остров","прибрежный город","заброшенный завод",
+"космическая станция","средневековая крепость","деревня","огромный мегаполис"
 ];
 
-const twists=[
- "главный свидетель оказывается связан с происходящим",
- "найденные доказательства были специально оставлены для героя",
- "человек, которому герой доверял, скрывал важную правду",
- "угроза оказывается совсем не такой, какой казалась сначала",
- "события повторяют старую историю",
- "герой понимает, что за ним наблюдали с самого начала",
- "главная загадка имеет неожиданное личное объяснение",
- "враг и герой преследуют одну и ту же цель",
- "важная деталь из первой сцены получает смысл только в финале",
- "герой сам невольно запустил цепочку событий"
+const times=[
+"ночь","рассвет","утро","день","вечер","глубокая ночь","пасмурный день"
 ];
 
-const endings=[
- "герой спасает город, но исчезает прежде, чем узнаёт, что произошло дальше",
- "правда становится известна, однако последствия оказываются страшнее самой тайны",
- "герои побеждают, но последняя сцена намекает на новую угрозу",
- "главный конфликт разрешается неожиданным компромиссом",
- "герой получает возможность начать всё заново",
- "тайна раскрыта, но один вопрос остаётся без ответа",
- "история заканчивается спокойной сценой после большой катастрофы",
- "финал оказывается открытым"
+const weather=[
+"идёт дождь","падает снег","стоит густой туман","сильный ветер",
+"небо затянуто облаками","неожиданно начинается гроза","погода спокойная"
+];
+
+const objects=[
+"старый ключ","странный телефон","пистолет","фотография","дневник",
+"медальон","флешка","карта","старые часы","неизвестный прибор",
+"чемодан","запечатанная коробка","радиостанция","древний символ"
+];
+
+const threats=[
+"неизвестный преследователь","группа вооружённых людей","странное существо",
+"тайная организация","внезапная катастрофа","полиция",
+"враждебная группа выживших","неизвестная аномалия","старый враг"
+];
+
+const actions=[
+"замечает","находит","теряет","прячет","открывает","ломает",
+"передаёт","поднимает","выбрасывает","исследует","крадёт"
 ];
 
 const titleA=[
- "Последний","Забытый","Тёмный","Нулевой","Северный","Красный",
- "Тихий","Ночной","Потерянный","Чужой","Последний сигнал",
- "Город","Холодный","Седьмой","Закрытый","Пятый","Одинокий"
+"Последний","Тёмный","Забытый","Сломанный","Ночной","Чужой",
+"Пятый","Тайный","Красный","Потерянный","Последний сигнал",
+"Город","За гранью","След","До рассвета"
 ];
 
 const titleB=[
- "сигнал","предел","рейс","архив","город","уровень","рубеж",
- "протокол","эксперимент","маршрут","день","час","портал",
- "след","переход","район","контакт","ключ","секрет"
+"след","предел","город","ключ","поворот","час",
+"день","дом","маршрут","секрет","выбор","порог",
+"протокол","рубеж","пленник","артефакт"
 ];
 
-const titleC=[
- "Эхо","После полуночи","Без имени","Последняя дверь",
- "Точка возврата","Нулевая зона","Пустой город","Другая сторона",
- "До рассвета","Вторая жизнь","Тишина","Граница"
-];
+let selectedGenre="Хоррор";
+let currentStory=null;
+let currentScene=0;
+let playing=false;
+let timer=null;
+let voice=true;
 
 const $=id=>document.getElementById(id);
-const pick=a=>a[Math.floor(Math.random()*a.length)];
-const rand=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
-const uid=()=>Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,10);
+const rand=a=>a[Math.floor(Math.random()*a.length)];
+const chance=p=>Math.random()<p;
 
-let saved=JSON.parse(localStorage.getItem("storyverse_history")||"[]");
-let current=null;
-let playerIndex=0;
-let playing=false;
-let sound=true;
-let animFrame=null;
-let audioCtx=null;
-let historyFilter="all";
-
-function saveDB(){
-  localStorage.setItem("storyverse_history",JSON.stringify(saved));
-  $("historyCount").textContent=saved.length;
+function pickUnique(arr,n){
+let copy=[...arr],out=[];
+while(out.length<n&&copy.length){
+let i=Math.floor(Math.random()*copy.length);
+out.push(copy.splice(i,1)[0]);
+}
+return out;
 }
 
-function initGenres(){
-  $("genres").innerHTML=GENRES.map((g,i)=>
-    `<button class="genre" data-g="${i}" onclick="this.classList.toggle('on')">${g}</button>`
-  ).join("");
+function makeGenres(){
+const box=$("genres");
+box.innerHTML="";
+Object.keys(genres).forEach(g=>{
+let b=document.createElement("button");
+b.className="genre"+(g===selectedGenre?" active":"");
+b.innerHTML=genres[g].icon+" "+g;
+b.onclick=()=>{
+selectedGenre=g;
+document.querySelectorAll(".genre").forEach(x=>x.classList.remove("active"));
+b.classList.add("active");
+};
+box.appendChild(b);
+});
+}
+makeGenres();
+
+function randomTitle(){
+return rand(titleA)+" "+rand(titleB);
 }
 
-function showPage(name){
-  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
-  $("page-"+name).classList.add("active");
-  document.querySelectorAll(".nav").forEach(x=>x.classList.toggle("active",x.dataset.page===name));
-  if(name==="history")renderHistory();
+function generateCharacters(n,genre){
+let names=pickUnique(firstNames,n);
+return names.map((name,i)=>{
+let role;
+if(i===0) role="главный герой";
+else if(i===1) role=rand(["напарник","друг","союзник","сестра","брат","коллега"]);
+else if(i===2) role=rand(["антагонист","подозреваемый","соперник","преследователь"]);
+else role=rand(["свидетель","местный житель","помощник","враг","случайный участник"]);
+
+return{
+name:name+" "+rand(surnames),
+role,
+profession:rand(professions),
+trait:rand(traits),
+goal:rand(goals),
+secret:rand([
+"скрывает важную информацию",
+"раньше уже сталкивался с этой проблемой",
+"не говорит всей правды",
+"связан с одним из противников",
+"боится повторения прошлого",
+"имеет собственный план"
+]),
+emoji:rand(["👨","👩","🧑","👨‍🦱","👩‍🦰","🧔"])
+};
+});
 }
 
-function showToast(text){
-  const t=$("toast");
-  t.textContent=text;t.classList.add("show");
-  clearTimeout(showToast.t);
-  showToast.t=setTimeout(()=>t.classList.remove("show"),2200);
+function makeStory(){
+const type=$("type").value;
+const sceneCount=+$("sceneCount").value;
+const charCount=+$("charCount").value;
+const mood=$("mood").value;
+
+let genre=selectedGenre;
+let data=genres[genre];
+let structure=rand(data.structures).slice();
+
+if(sceneCount>structure.length){
+while(structure.length<sceneCount){
+structure.push(rand([
+"новое препятствие","неожиданная встреча","перемена плана",
+"тайный разговор","опасная находка","последствие прошлого",
+"погоня","открытие"
+]));
+}
+}else{
+structure=structure.slice(0,sceneCount);
 }
 
-function getGenres(){
-  const selected=[...document.querySelectorAll(".genre.on")].map(x=>x.textContent);
-  if($("mode").value==="random" || !selected.length){
-    const shuffled=[...GENRES].sort(()=>Math.random()-.5);
-    return shuffled.slice(0,rand(1,3));
-  }
-  return selected.slice(0,3);
+let characters=generateCharacters(charCount,genre);
+let location=rand(locations);
+let time=rand(times);
+let rain=rand(weather);
+let object=rand(objects);
+let threat=rand(threats);
+let main=characters[0];
+let second=characters[1]||main;
+
+let events=[];
+let state={
+trust:0,
+danger:0,
+object,
+location,
+time,
+threat,
+lost:false,
+injured:false,
+secret:false
+};
+
+structure.forEach((beat,i)=>{
+let actor=characters[i%characters.length];
+let partner=characters[(i+1)%characters.length];
+
+let text="";
+let dialogue="";
+let action="idle";
+
+switch(beat){
+
+case"изоляция":
+text=`${main.name} оказывается в ${location}. Связь внезапно пропадает, а ${partner.name} замечает, что дорога назад исчезла.`;
+action="walk";
+state.danger++;
+break;
+
+case"исчезновение":
+text=`${partner.name} бесследно исчезает. Остальные находят только ${state.object}.`;
+dialogue=`«Он не мог просто исчезнуть...» — говорит ${main.name}.`;
+state.danger++;
+state.secret=true;
+action="search";
+break;
+
+case"расследование":
+text=`${main.name} и ${actor.name} начинают искать ответы. Они находят следы, которые ведут прямо к ${state.location}.`;
+action="search";
+state.trust++;
+break;
+
+case"первое столкновение":
+text=`Из темноты появляется ${state.threat}. Героям приходится отступить.`;
+dialogue=`«Бежим!» — кричит ${second.name}.`;
+state.danger+=2;
+action="run";
+break;
+
+case"погоня":
+text=`Герои пытаются скрыться. ${actor.name} отвлекает преследователей, пока ${main.name} ищет путь наружу.`;
+state.danger++;
+action="chase";
+break;
+
+case"страшное открытие":
+text=`Герои обнаруживают, что происходящее связано с тайной, которую ${main.name} уже видел в прошлом.`;
+dialogue=`«Теперь я понимаю, зачем меня сюда привели».`;
+state.secret=true;
+action="reveal";
+break;
+
+case"последняя попытка":
+text=`Группа собирается вместе и решает рискнуть всем ради последнего шанса.`;
+state.danger++;
+action="fight";
+break;
+
+case"неожиданная развязка":
+text=`В последний момент оказывается, что настоящий источник угрозы находился совсем рядом.`;
+action="reveal";
+break;
+
+case"преступление":
+text=`В ${location} происходит преступление. ${main.name} первым замечает странную деталь, которую остальные пропустили.`;
+action="search";
+break;
+
+case"осмотр места":
+text=`${main.name} изучает место происшествия вместе с ${actor.name}. Среди следов находится ${state.object}.`;
+state.trust++;
+action="search";
+break;
+
+case"первичная улика":
+text=`${actor.name} обнаруживает улику, которая неожиданно связывает двух персонажей.`;
+state.secret=true;
+action="search";
+break;
+
+case"опрос подозреваемых":
+text=`Герои допрашивают нескольких людей. Каждый рассказывает свою версию, но одна деталь повторяется у всех.`;
+action="talk";
+break;
+
+case"ложный след":
+text=`След приводит группу к неправильному человеку. Настоящий преступник получает время скрыться.`;
+state.danger++;
+action="walk";
+break;
+
+case"новая улика":
+text=`${main.name} замечает несоответствие и понимает, что предыдущая улика была специально подброшена.`;
+state.trust++;
+action="reveal";
+break;
+
+case"разоблачение":
+text=`${main.name} устраивает ловушку и заставляет настоящего виновника выдать себя.`;
+action="reveal";
+break;
+
+case"арест":
+text=`История заканчивается задержанием виновника, но ${main.name} замечает ещё одну странность.`;
+action="walk";
+break;
+
+case"обычная жизнь":
+text=`${main.name} пытается жить обычной жизнью, пока случайная встреча не меняет его планы.`;
+action="walk";
+break;
+
+case"личный конфликт":
+text=`Между ${main.name} и ${second.name} возникает серьёзный конфликт из-за решения, которое нельзя отменить.`;
+dialogue=`«Ты даже не попытался меня понять».`;
+state.trust--;
+action="talk";
+break;
+
+case"разговор":
+text=`Герои наконец говорят открыто. Каждый признаётся в том, что скрывал.`;
+state.trust++;
+action="talk";
+break;
+
+case"разрыв":
+text=`После тяжёлого разговора ${second.name} уходит, оставляя ${main.name} одного.`;
+state.trust-=2;
+action="walk";
+break;
+
+case"осознание":
+text=`Оставшись один, ${main.name} понимает, какую ошибку совершил.`;
+action="reveal";
+break;
+
+case"новое начало":
+text=`Герои встречаются снова и получают возможность начать всё заново.`;
+action="walk";
+break;
+
+case"знакомство":
+text=`В ${location} ${main.name} случайно знакомится с ${second.name}. Встреча кажется обычной, но оба запоминают её.`;
+state.trust++;
+action="talk";
+break;
+
+case"сближение":
+text=`Герои проводят всё больше времени вместе и обнаруживают, что между ними появляется настоящее доверие.`;
+state.trust+=2;
+action="talk";
+break;
+
+case"недоразумение":
+text=`Случайно услышанная фраза заставляет ${main.name} поверить, что ${second.name} его предал.`;
+state.trust-=2;
+action="talk";
+break;
+
+case"разлука":
+text=`Обстоятельства вынуждают героев разойтись. Каждый думает, что больше не встретит другого.`;
+action="walk";
+break;
+
+case"признание":
+text=`${main.name} наконец решается сказать то, что скрывал всё это время.`;
+dialogue=`«Я должен был сказать это раньше».`;
+state.trust+=2;
+action="talk";
+break;
+
+case"аномалия":
+text=`В небе появляется неизвестное явление. ${main.name} фиксирует его на камеру, но запись начинает меняться сама.`;
+state.danger++;
+action="reveal";
+break;
+
+case"исследование":
+text=`Герои изучают странное явление и находят внутри него следы неизвестной технологии.`;
+action="search";
+break;
+
+case"контакт":
+text=`С неизвестным источником удаётся установить контакт. Он знает имена всех присутствующих.`;
+state.secret=true;
+action="talk";
+break;
+
+case"эксперимент":
+text=`Попытка проверить устройство приводит к неожиданным последствиям: окружающая реальность начинает меняться.`;
+state.danger+=2;
+action="shake";
+break;
+
+case"последствие":
+text=`После эксперимента один из персонажей исчезает из памяти остальных. Только ${main.name} помнит, что он существовал.`;
+state.secret=true;
+action="reveal";
+break;
+
+case"выбор":
+text=`${main.name} получает два варианта: вернуть всё назад или позволить новому миру существовать.`;
+dialogue=`«Назад дороги уже нет».`;
+action="talk";
+break;
+
+case"новый мир":
+text=`Герой делает выбор. Пространство вокруг него меняется, открывая неизвестный мир.`;
+action="reveal";
+break;
+
+case"призвание":
+text=`${main.name} узнаёт, что именно он должен остановить древнюю угрозу.`;
+action="reveal";
+break;
+
+case"получение задания":
+text=`Старый союзник передаёт герою ${state.object} и просит доставить его в ${rand(locations)}.`;
+action="talk";
+break;
+
+case"путешествие":
+text=`Герои отправляются в путь. По дороге к ним присоединяется новый союзник — ${actor.name}.`;
+action="walk";
+break;
+
+case"первое испытание":
+text=`На пути возникает опасность. Группа вынуждена действовать сообща.`;
+state.danger++;
+action="fight";
+break;
+
+case"древний враг":
+text=`Появляется ${state.threat}. Он знает прошлое главного героя и предлагает сделку.`;
+action="talk";
+break;
+
+case"финальная битва":
+text=`Все персонажи сходятся в одном месте. Начинается решающая битва за ${state.object}.`;
+state.danger+=3;
+action="fight";
+break;
+
+case"возвращение":
+text=`После победы герои возвращаются домой, но ${main.name} понимает, что приключение изменило его навсегда.`;
+action="walk";
+break;
+
+case"выживание":
+text=`Герои просыпаются в разрушенном районе ${location}. Еды почти не осталось, а впереди неизвестность.`;
+state.danger++;
+action="walk";
+break;
+
+case"поиск ресурсов":
+text=`${actor.name} отправляется на поиски ресурсов, пока остальные укрепляют убежище.`;
+action="search";
+break;
+
+case"следы людей":
+text=`Группа обнаруживает свежие следы. Кто-то был здесь совсем недавно.`;
+action="search";
+break;
+
+case"опасная территория":
+text=`Герои входят в опасную зону. Отступать уже поздно.`;
+state.danger+=2;
+action="walk";
+break;
+
+case"конфликт группы":
+text=`Нехватка ресурсов приводит к конфликту. ${main.name} и ${actor.name} предлагают противоположные решения.`;
+state.trust--;
+action="talk";
+break;
+
+case"неожиданный враг":
+text=`Из-за укрытия появляется ${state.threat}. Героям приходится защищаться.`;
+state.danger+=2;
+action="fight";
+break;
+
+case"новый путь":
+text=`После всех потерь группа покидает старое убежище и идёт навстречу неизвестному будущему.`;
+action="walk";
+break;
+
+case"задание":
+text=`Герой получает приказ выполнить опасную миссию в ${location}.`;
+action="talk";
+break;
+
+case"подготовка":
+text=`Команда собирается. Каждый получает свою роль, но ${actor.name} явно что-то скрывает.`;
+state.secret=true;
+action="talk";
+break;
+
+case"выдвижение":
+text=`Отряд покидает безопасное место и направляется прямо к цели.`;
+action="walk";
+break;
+
+case"бой":
+text=`Противник атакует первым. Герои вступают в тяжёлый бой.`;
+state.danger+=2;
+action="fight";
+break;
+
+case"потери":
+text=`После столкновения группа теряет важный ресурс и вынуждена изменить план.`;
+state.danger++;
+action="shake";
+break;
+
+case"контратака":
+text=`${main.name} предлагает рискованный план контратаки. Остальные соглашаются.`;
+action="fight";
+break;
+
+case"последняя задача":
+text=`Остаётся выполнить последнюю задачу. Времени почти не осталось.`;
+state.danger+=2;
+action="run";
+break;
+
+case"тайная встреча":
+text=`${main.name} встречается с неизвестным человеком. Тот предлагает раскрыть правду в обмен на услугу.`;
+action="talk";
+break;
+
+case"угроза":
+text=`Герои понимают, что за ними следят. Наблюдатель исчезает прежде, чем его удаётся разглядеть.`;
+state.danger++;
+action="search";
+break;
+
+case"ловушка":
+text=`Оказывается, что путь был заранее подготовлен. Герои попадают в ловушку.`;
+state.danger+=2;
+action="shake";
+break;
+
+case"твист":
+text=`Всё, что происходило раньше, получает новое объяснение. Главный союзник оказывается связан с тайной.`;
+state.secret=true;
+action="reveal";
+break;
+
+case"сон":
+text=`${main.name} видит сон, в котором повторяется один и тот же символ: ${state.object}.`;
+action="reveal";
+break;
+
+case"голоса":
+text=`В пустом здании герои слышат голоса людей, которых здесь быть не должно.`;
+state.danger++;
+action="search";
+break;
+
+case"старый дом":
+text=`В старом доме обнаруживаются фотографии, на которых изображены сами герои, хотя снимкам много лет.`;
+state.secret=true;
+action="reveal";
+break;
+
+case"ритуал":
+text=`Герои пытаются завершить древний ритуал до того, как неизвестная сила прорвётся наружу.`;
+state.danger+=3;
+action="fight";
+break;
+
+default:
+text=`${actor.name} делает неожиданный шаг, который меняет планы всей группы.`;
+action=rand(["walk","talk","search","run","reveal"]);
 }
 
-function makeTitle(){
-  const patterns=[
-    ()=>pick(titleA)+" "+pick(titleB),
-    ()=>pick(titleA)+" "+pick(titleC),
-    ()=>pick(titleB)+" "+pick(titleC),
-    ()=>"Проект «"+pick(titleB)+"»",
-    ()=>"Операция «"+pick(titleB)+"»",
-    ()=>pick(titleC)+" — "+pick(titleB)
-  ];
-  return pick(patterns)();
+if(chance(.28)){
+text+=" "+actor.name+" неожиданно меняет своё решение, и остальным приходится подстраиваться.";
+state.trust+=chance(.5)?1:-1;
 }
 
-function createCharacter(role){
-  return {
-    id:uid(),
-    name:pick(firstNames)+" "+pick(surnames),
-    role,
-    profession:pick(professions),
-    trait:pick(traits)
-  };
+events.push({
+number:i+1,
+title:beat,
+text,
+dialogue,
+action,
+actor:actor.name,
+partner:partner.name,
+location:i%3===0?location:rand(locations),
+time:i%2===0?time:rand(times),
+weather:i%3===0?rain:rand(weather)
+});
+});
+
+let ending;
+
+if(genre==="Комедия") ending=rand([
+"Все проблемы заканчиваются неожиданно удачно, хотя никто так и не понял, как это произошло.",
+"Герои терпят полный провал, но именно он становится их главным успехом.",
+"Последняя ошибка оказывается случайным спасением всей ситуации."
+]);
+else if(genre==="Хоррор"||genre==="Мистика") ending=rand([
+"На рассвете кажется, что всё закончилось. Затем камера показывает силуэт вдалеке.",
+"Герои спасаются, но один вопрос остаётся без ответа.",
+"Последний кадр показывает, что угроза никуда не исчезла."
+]);
+else if(genre==="Романтика") ending=state.trust>=2?
+"После долгого пути герои наконец перестают скрывать свои чувства.":
+"Они расходятся, понимая, что эта встреча навсегда изменила их.";
+else if(genre==="Детектив"||genre==="Триллер") ending=
+"Тайна раскрыта, однако последняя деталь показывает, что за происходящим стоял кто-то ещё.";
+else if(genre==="Постапокалипсис") ending=
+"Группа покидает разрушенный город и впервые за долгое время видит впереди свет.";
+else ending=rand([
+"Герои достигают цели, но понимают, что впереди их ждёт новая история.",
+"Главный конфликт заканчивается, а последствия решения остаются с героями.",
+"Герой делает свой выбор и открывает новую страницу жизни."
+]);
+
+events.push({
+number:events.length+1,
+title:"Финал",
+text:ending,
+dialogue:"",
+action:"final",
+actor:main.name,
+partner:second.name,
+location,
+time:"рассвет",
+weather:"небо постепенно проясняется"
+});
+
+return{
+id:Date.now()+Math.random(),
+title:randomTitle(),
+type,
+genre,
+mood,
+location,
+time,
+weather:rain,
+object,
+threat,
+characters,
+events,
+ending,
+created:new Date().toLocaleString("ru-RU")
+};
 }
 
-function buildStory(){
-  const genres=getGenres();
-  const world=pick(worlds);
-  const time=pick(times);
-  const main=createCharacter("Главный герой");
-  const ally=createCharacter("Союзник");
-  const rival=createCharacter("Противник");
-  const mentor=createCharacter("Таинственный информатор");
-  const goal=pick(goals);
-  const threat=pick(threats);
-  const location=pick(locations);
-  const twist=pick(twists);
-  const ending=pick(endings);
-  const type=$("type").value;
-  const count=Math.max(8,Math.min(40,parseInt($("sceneCount").value)||18));
+function generateStory(){
+currentStory=makeStory();
+currentScene=0;
+playing=false;
+stopTimer();
 
-  const title=makeTitle();
+$("storyBox").style.display="block";
+$("storyTitle").textContent=currentStory.title;
+$("storyMeta").textContent=
+`${currentStory.type} • ${currentStory.genre} • ${currentStory.events.length} сцен • ${currentStory.created}`;
 
-  const premise=
-`В ${time} году история разворачивается в ${world}. `+
-`${main.name}, ${main.profession} с характером: ${main.trait}, `+
-`внезапно оказывается втянут в события, которые начинают менять его жизнь. `+
-`Его главная цель — ${goal}. `+
-`На пути ему противостоит ${threat}. `+
-`Всё начинается в месте под названием «${location}». `+
-`Постепенно становится понятно: ${twist}. `+
-`История приводит героев к финалу, в котором ${ending}.`;
+$("summary").textContent=
+`История начинается в ${currentStory.location}. ${currentStory.characters[0].name} —
+${currentStory.characters[0].profession}, ${currentStory.characters[0].trait} персонаж,
+который хочет ${currentStory.characters[0].goal}. Вместе с ним действуют другие герои,
+каждый со своей целью и секретом. Главная угроза — ${currentStory.threat}.`;
 
-  const characters=[main,ally,rival,mentor];
-
-  const beats=[
-    ["Первые минуты","Герой замечает странную деталь, которую остальные люди почему-то игнорируют."],
-    ["Неожиданная встреча",`${ally.name} появляется в самый неподходящий момент и предлагает помощь.`],
-    ["Первый след",`В ${location} обнаруживается предмет, связанный с прошлым героя.`],
-    ["Опасность","Герои понимают, что за ними уже кто-то наблюдает."],
-    ["Новая информация",`${mentor.name} сообщает сведения, которые полностью меняют направление расследования.`],
-    ["Преследование","Герои вынуждены покинуть безопасное место."],
-    ["Старая тайна","Всплывает событие, о котором все предпочитали молчать."],
-    ["Разделение","Герои расходятся, чтобы проверить несколько версий одновременно."],
-    ["Ошибка","Одно неверное решение приводит к серьёзным последствиям."],
-    ["Встреча с противником",`${rival.name} наконец открыто вмешивается в происходящее.`],
-    ["Ложная победа","Кажется, что проблема решена, но появляется новая деталь."],
-    ["Большой поворот",twist+"."],
-    ["Последний путь","Герои направляются туда, где должна находиться разгадка."],
-    ["Выбор","Главному герою приходится выбирать между безопасностью и правдой."],
-    ["Конфликт","Все скрытые противоречия выходят наружу."],
-    ["Последняя попытка","Герои делают всё возможное, чтобы изменить ситуацию."],
-    ["Развязка",ending+"."],
-    ["Эпилог","Проходит время. Мир выглядит спокойнее, однако последняя деталь оставляет возможность для продолжения."]
-  ];
-
-  let scenes=[];
-  for(let i=0;i<count;i++){
-    const base=beats[i%beats.length];
-    let extra="";
-    if(i>=beats.length){
-      extra=pick([
-        " Герой находит новый путь.",
-        " В истории появляется ещё одна неизвестная переменная.",
-        " Решение приходится принимать за считанные минуты.",
-        " Кто-то неожиданно меняет сторону.",
-        " Герои возвращаются к детали из самого начала."
-      ]);
-    }
-    scenes.push({
-      id:uid(),
-      n:i+1,
-      title:base[0]+(i>=beats.length?" — продолжение":""),
-      text:base[1]+extra,
-      location:i===0?location:pick(locations),
-      mood:pick(["напряжение","тайна","спокойствие","опасность","надежда","хаос","меланхолия"])
-    });
-  }
-
-  const fingerprint=[
-    type,...genres,world,time,main.name,ally.name,rival.name,
-    goal,threat,location,twist,ending
-  ].join("|").toLowerCase();
-
-  return {
-    id:uid(),
-    created:new Date().toISOString(),
-    type,title,genres,world,time,main,characters,premise,scenes,
-    fingerprint,
-    favorite:false
-  };
+renderCharacters();
+renderScenes();
+drawScene();
+showToast("Новая история создана");
 }
 
-/* Проверяем только СОХРАНЁННЫЕ истории.
-   Несохранённая генерация не обязана существовать после закрытия страницы. */
-
-function isTooSimilar(story){
-  const words=new Set(story.fingerprint.split("|"));
-  for(const old of saved){
-    const oldWords=new Set((old.fingerprint||"").split("|"));
-    let common=0;
-    words.forEach(w=>{if(oldWords.has(w))common++});
-    const ratio=common/Math.max(words.size,oldWords.size);
-    if(ratio>.78)return true;
-    if(old.title===story.title)return true;
-  }
-  return false;
+function renderCharacters(){
+$("characters").innerHTML=currentStory.characters.map(c=>`
+<div class="char">
+<div class="avatar">${c.emoji}</div>
+<strong>${c.name}</strong>
+<small>${c.role}</small>
+<small>${c.profession}, ${c.trait}</small>
+<small>Цель: ${c.goal}</small>
+<small>Секрет: ${c.secret}</small>
+</div>
+`).join("");
 }
 
-function generate(){
-  $("genModal").classList.add("show");
-  const statuses=[
-    "Создаём мир...",
-    "Подбираем жанры...",
-    "Создаём персонажей...",
-    "Строим конфликт...",
-    "Генерируем неожиданный поворот...",
-    "Разбиваем историю на сцены...",
-    "Проверяем сохранённые сюжеты...",
-    "Формируем визуальную постановку..."
-  ];
-
-  let p=0;
-  const timer=setInterval(()=>{
-    p+=rand(8,18);
-    if(p>100)p=100;
-    $("genProgress").style.width=p+"%";
-    $("genStatus").textContent=pick(statuses);
-    if(p>=100){
-      clearInterval(timer);
-
-      let story,attempt=0;
-      do{
-        story=buildStory();
-        attempt++;
-      }while(isTooSimilar(story)&&attempt<80);
-
-      current=story;
-      $("genModal").classList.remove("show");
-      renderCurrent();
-      setupPlayer();
-      showPage("generator");
-      showToast("✨ Новая история создана");
-    }
-  },160);
-}
-
-function randomGenerate(){
-  $("type").value=pick(["Фильм","Мультфильм","Сериал","Короткометражка"]);
-  $("mode").value="random";
-  $("sceneCount").value=rand(12,28);
-  document.querySelectorAll(".genre").forEach(x=>x.classList.remove("on"));
-  generate();
-}
-
-function renderCurrent(){
-  if(!current)return;
-
-  $("result").innerHTML=`
-    <div class="resultHead">
-      <div class="kicker">${current.type}</div>
-      <div class="title">${esc(current.title)}</div>
-      <div class="tags">
-        ${current.genres.map(g=>`<span class="pill">${esc(g)}</span>`).join("")}
-        <span class="pill">${current.scenes.length} сцен</span>
-      </div>
-    </div>
-
-    <div class="resultBody">
-      <div class="toolbar">
-        <button class="btn primary" onclick="saveCurrent()">💾 Сохранить</button>
-        <button class="btn" onclick="setupPlayer();showPage('player')">▶️ Смотреть</button>
-        <button class="btn" onclick="generate()">🔄 Новый сюжет</button>
-      </div>
-
-      <div class="card" style="margin-bottom:14px">
-        <h3>🌍 Мир</h3>
-        <div class="storyText">${esc(current.world)} — ${esc(current.time)}.</div>
-      </div>
-
-      <div class="card" style="margin-bottom:14px">
-        <h3>📖 Сюжет</h3>
-        <div class="storyText">${esc(current.premise)}</div>
-      </div>
-
-      <div class="card" style="margin-bottom:14px">
-        <h3>👤 Персонажи</h3>
-        <div class="characters">
-          ${current.characters.map(c=>`
-            <div class="char">
-              <strong>${esc(c.name)}</strong>
-              <span>${esc(c.role)} · ${esc(c.profession)} · ${esc(c.trait)}</span>
-            </div>
-          `).join("")}
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>🎬 Сцены</h3>
-        <div class="scenes">
-          ${current.scenes.map(s=>`
-            <div class="scene">
-              <div class="sceneNum">${String(s.n).padStart(2,"0")}</div>
-              <div>
-                <h4>${esc(s.title)}</h4>
-                <p>${esc(s.text)}</p>
-              </div>
-              <button onclick="openScene(${s.n-1})">▶</button>
-            </div>
-          `).join("")}
-        </div>
-      </div>
-    </div>
-  `;
+function renderScenes(){
+$("scenes").innerHTML=currentStory.events.map((e,i)=>`
+<div class="scene" onclick="jumpScene(${i})">
+<div class="sceneNum">${i+1}</div>
+<div>
+<h3>${e.title}</h3>
+<p>${e.text}</p>
+${e.dialogue?`<div class="dialogue">${e.dialogue}</div>`:""}
+<div class="meta">📍 ${e.location} • ${e.time} • ${e.weather}</div>
+</div>
+</div>
+`).join("");
 }
 
 function saveCurrent(){
-  if(!current)return;
-  if(saved.some(x=>x.id===current.id)){
-    showToast("Эта история уже сохранена");
-    return;
-  }
-  saved.unshift(JSON.parse(JSON.stringify(current)));
-  saveDB();
-  renderHistory();
-  showToast("💾 История сохранена");
+if(!currentStory)return;
+let history=JSON.parse(localStorage.getItem("storyverse_history")||"[]");
+
+let signature=currentStory.events
+.map(e=>e.title+"|"+e.location+"|"+e.action)
+.join("||");
+
+let duplicate=history.some(s=>s.signature===signature);
+
+if(duplicate){
+showToast("Такая история уже сохранена");
+return;
+}
+
+history.unshift({
+...currentStory,
+signature
+});
+
+if(history.length>100)history=history.slice(0,100);
+
+localStorage.setItem("storyverse_history",JSON.stringify(history));
+showToast("История сохранена");
+renderHistory();
 }
 
 function renderHistory(){
-  const box=$("historyGrid");
-  let arr=historyFilter==="fav"?saved.filter(x=>x.favorite):saved;
+let history=JSON.parse(localStorage.getItem("storyverse_history")||"[]");
+let box=$("historyGrid");
 
-  if(!arr.length){
-    box.innerHTML=`<div class="empty" style="grid-column:1/-1">
-      <div style="font-size:42px">📚</div>
-      <h3>История пуста</h3>
-      <p>Создай произведение и нажми «Сохранить».</p>
-    </div>`;
-    return;
-  }
-
-  box.innerHTML=arr.map(x=>`
-    <div class="historyCard">
-      <div class="kicker">${esc(x.type)}</div>
-      <h3>${esc(x.title)}</h3>
-      <div class="tags">${x.genres.map(g=>`<span class="pill">${esc(g)}</span>`).join("")}</div>
-      <p>${esc(x.premise.slice(0,180))}...</p>
-      <div class="actions">
-        <button class="btn small primary" onclick="openSaved('${x.id}')">▶ Открыть</button>
-        <button class="btn small" onclick="favorite('${x.id}')">${x.favorite?"★":"☆"}</button>
-        <button class="btn small danger" onclick="deleteSaved('${x.id}')">🗑</button>
-      </div>
-    </div>
-  `).join("");
+if(!history.length){
+box.innerHTML=`<div class="empty">📚<br><br>Пока нет сохранённых историй</div>`;
+return;
 }
 
-function filterHistory(type){
-  historyFilter=type;
-  renderHistory();
+box.innerHTML=history.map((s,i)=>`
+<div class="historyCard">
+<h3>${s.title}</h3>
+<p>${s.type} • ${s.genre}<br>${s.created}</p>
+<p>${s.characters.length} персонажей • ${s.events.length} сцен</p>
+<div class="historyBtns">
+<button onclick="loadHistory(${i})">▶ Открыть</button>
+<button onclick="deleteHistory(${i})">🗑</button>
+</div>
+</div>
+`).join("");
 }
 
-function openSaved(id){
-  const x=saved.find(a=>a.id===id);
-  if(!x)return;
-  current=JSON.parse(JSON.stringify(x));
-  renderCurrent();
-  setupPlayer();
-  showPage("generator");
+function loadHistory(i){
+let history=JSON.parse(localStorage.getItem("storyverse_history")||"[]");
+currentStory=history[i];
+currentScene=0;
+showPage("generator");
+$("storyBox").style.display="block";
+$("storyTitle").textContent=currentStory.title;
+$("storyMeta").textContent=
+`${currentStory.type} • ${currentStory.genre} • ${currentStory.events.length} сцен • сохранено`;
+
+$("summary").textContent=
+`Сохранённая история: ${currentStory.characters[0].name} оказывается в
+${currentStory.location}. Угроза истории — ${currentStory.threat}.`;
+
+renderCharacters();
+renderScenes();
+drawScene();
+showToast("История загружена");
 }
 
-function favorite(id){
-  const x=saved.find(a=>a.id===id);
-  if(!x)return;
-  x.favorite=!x.favorite;
-  saveDB();renderHistory();
-}
-
-function deleteSaved(id){
-  if(!confirm("Удалить эту историю?"))return;
-  saved=saved.filter(x=>x.id!==id);
-  saveDB();renderHistory();
-  showToast("История удалена");
+function deleteHistory(i){
+let h=JSON.parse(localStorage.getItem("storyverse_history")||"[]");
+h.splice(i,1);
+localStorage.setItem("storyverse_history",JSON.stringify(h));
+renderHistory();
+showToast("Удалено");
 }
 
 function clearHistory(){
-  if(!saved.length)return;
-  if(!confirm("Удалить всю сохранённую историю?"))return;
-  saved=[];
-  saveDB();renderHistory();
-  showToast("История очищена");
+if(!confirm("Удалить все сохранённые истории?"))return;
+localStorage.removeItem("storyverse_history");
+renderHistory();
 }
 
-function exportHistory(){
-  const blob=new Blob([JSON.stringify(saved,null,2)],{type:"application/json"});
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="storyverse-history.json";
-  a.click();
-  URL.revokeObjectURL(a.href);
+function showPage(page){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+$(page).classList.add("active");
+
+document.querySelectorAll(".nav").forEach(n=>{
+n.classList.toggle("active",n.dataset.page===page);
+});
+
+if(page==="history")renderHistory();
+
+if(page==="player"){
+if(currentStory){
+$("playerInfo").textContent=
+`${currentStory.title} • сцена ${currentScene+1}/${currentStory.events.length}`;
+}
+drawScene();
+}
 }
 
-function importHistory(e){
-  const file=e.target.files[0];
-  if(!file)return;
-  const reader=new FileReader();
-  reader.onload=()=>{
-    try{
-      const data=JSON.parse(reader.result);
-      if(!Array.isArray(data))throw new Error();
-      const map=new Map(saved.map(x=>[x.id,x]));
-      data.forEach(x=>{if(x&&x.id)map.set(x.id,x)});
-      saved=[...map.values()];
-      saveDB();renderHistory();
-      showToast("📥 История импортирована");
-    }catch{
-      showToast("Не удалось импортировать файл");
-    }
-  };
-  reader.readAsText(file);
+function openPlayer(){
+showPage("player");
+drawScene();
 }
 
-/* =========================
-   CANVAS PLAYER
-========================= */
-
-function setupPlayer(){
-  if(!current)return;
-  playerIndex=0;
-  playing=false;
-  $("playBtn").textContent="▶️";
-  $("playerEmpty").style.display="none";
-  $("playerBox").style.display="block";
-  drawScene();
+function newStory(){
+showPage("generator");
+generateStory();
 }
 
-function openScene(i){
-  if(!current)return;
-  playerIndex=Math.max(0,Math.min(current.scenes.length-1,i));
-  setupPlayer();
-  showPage("player");
+function jumpScene(i){
+currentScene=i;
+drawScene();
+speakCurrent();
 }
 
 function nextScene(){
-  if(!current)return;
-  playerIndex++;
-  if(playerIndex>=current.scenes.length){
-    playerIndex=current.scenes.length-1;
-    playing=false;
-    $("playBtn").textContent="▶️";
-  }
-  drawScene();
-  beep(260);
+if(!currentStory)return;
+currentScene++;
+if(currentScene>=currentStory.events.length){
+currentScene=0;
+playing=false;
+stopTimer();
+}
+drawScene();
+speakCurrent();
 }
 
 function prevScene(){
-  if(!current)return;
-  playerIndex=Math.max(0,playerIndex-1);
-  drawScene();
-  beep(180);
+if(!currentStory)return;
+currentScene--;
+if(currentScene<0)currentScene=currentStory.events.length-1;
+drawScene();
 }
 
 function togglePlay(){
-  if(!current)return;
-  playing=!playing;
-  $("playBtn").textContent=playing?"⏸":"▶️";
-  if(playing)animate();
+if(!currentStory)return;
+
+playing=!playing;
+
+if(playing){
+$("playBtn").textContent="⏸";
+startTimer();
+speakCurrent();
+}else{
+$("playBtn").textContent="▶";
+stopTimer();
+}
 }
 
-function animate(){
-  if(!playing)return;
-  drawScene(performance.now());
-  animFrame=requestAnimationFrame(animate);
+function startTimer(){
+stopTimer();
+timer=setInterval(()=>{
+if(!currentStory)return;
+currentScene++;
+if(currentScene>=currentStory.events.length){
+currentScene=0;
+}
+drawScene();
+speakCurrent();
+},5200);
 }
 
-function drawScene(time=0){
-  if(!current)return;
-  const canvas=$("canvas");
-  const ctx=canvas.getContext("2d");
-  const w=canvas.width,h=canvas.height;
-  const s=current.scenes[playerIndex];
-
-  ctx.clearRect(0,0,w,h);
-
-  const palettes=[
-    ["#080a14","#30255c"],
-    ["#101014","#3b2525"],
-    ["#071318","#163b43"],
-    ["#151009","#4a3218"],
-    ["#0d1011","#29372b"],
-    ["#080b15","#17316a"]
-  ];
-  const pal=palettes[playerIndex%palettes.length];
-
-  const grad=ctx.createLinearGradient(0,0,w,h);
-  grad.addColorStop(0,pal[0]);grad.addColorStop(1,pal[1]);
-  ctx.fillStyle=grad;ctx.fillRect(0,0,w,h);
-
-  /* Луна / солнце */
-  ctx.globalAlpha=.8;
-  ctx.fillStyle="#f2e9c9";
-  ctx.beginPath();
-  ctx.arc(w*.78,h*.22,55,0,Math.PI*2);ctx.fill();
-  ctx.globalAlpha=1;
-
-  /* дальний город */
-  for(let i=0;i<18;i++){
-    const bw=rand(35,90);
-    const bh=rand(80,230);
-    const x=i*78-rand(0,25);
-    const y=h*.75-bh;
-    ctx.fillStyle=i%3===0?"#11151e":"#0c1018";
-    ctx.fillRect(x,y,bw,bh);
-
-    ctx.fillStyle="rgba(255,220,130,.45)";
-    for(let yy=y+20;yy<y+bh-10;yy+=27){
-      if(Math.random()>.35)ctx.fillRect(x+10,yy,6,9);
-      if(Math.random()>.45)ctx.fillRect(x+28,yy,6,9);
-    }
-  }
-
-  /* земля */
-  ctx.fillStyle="#08090d";
-  ctx.fillRect(0,h*.75,w,h*.25);
-
-  /* персонаж */
-  const bob=Math.sin(time/220)*4;
-  const px=w*.5,py=h*.65+bob;
-
-  ctx.fillStyle="#171a22";
-  ctx.beginPath();ctx.arc(px,py-90,34,0,Math.PI*2);ctx.fill();
-
-  ctx.fillStyle="#252a38";
-  ctx.fillRect(px-38,py-55,76,100);
-
-  ctx.strokeStyle="#2d3342";
-  ctx.lineWidth=18;
-  ctx.beginPath();
-  ctx.moveTo(px-27,py-35);ctx.lineTo(px-70,py+15);
-  ctx.moveTo(px+27,py-35);ctx.lineTo(px+70,py+15);
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.moveTo(px-20,py+45);ctx.lineTo(px-38,py+105);
-  ctx.moveTo(px+20,py+45);ctx.lineTo(px+38,py+105);
-  ctx.stroke();
-
-  /* атмосферные частицы */
-  for(let i=0;i<45;i++){
-    const xx=(i*97+(time/15))%w;
-    const yy=(i*43)%h;
-    ctx.fillStyle="rgba(255,255,255,.15)";
-    ctx.fillRect(xx,yy,2,2);
-  }
-
-  /* затемнение */
-  const vignette=ctx.createRadialGradient(w/2,h/2,100,w/2,h/2,700);
-  vignette.addColorStop(0,"rgba(0,0,0,0)");
-  vignette.addColorStop(1,"rgba(0,0,0,.62)");
-  ctx.fillStyle=vignette;ctx.fillRect(0,0,w,h);
-
-  /* название сцены */
-  ctx.fillStyle="#fff";
-  ctx.font="bold 30px Arial";
-  ctx.fillText(s.title,45,55);
-
-  ctx.fillStyle="rgba(255,255,255,.7)";
-  ctx.font="18px Arial";
-  ctx.fillText(s.location+" · "+s.mood,45,84);
-
-  $("playerSceneTitle").textContent=s.title;
-  $("playerSceneText").textContent=s.text;
-  $("sceneCounter").textContent=(playerIndex+1)+"/"+current.scenes.length;
-  $("progress").style.width=((playerIndex+1)/current.scenes.length*100)+"%";
-
-  /* автоматическое движение */
-  if(playing && time && time%1<20){
-    /* оставляем сцену минимум на время; переход ниже */
-  }
+function stopTimer(){
+if(timer){
+clearInterval(timer);
+timer=null;
+}
+$("playBtn").textContent="▶";
 }
 
-/* Автопереход по таймеру */
-let lastAuto=0;
-function animationLoop(t){
-  if(playing && current){
-    if(!lastAuto)lastAuto=t;
-    if(t-lastAuto>5000){
-      lastAuto=t;
-      nextScene();
-    }
-  }
-  requestAnimationFrame(animationLoop);
-}
-requestAnimationFrame(animationLoop);
-
-/* =========================
-   SOUND
-========================= */
-
-function beep(freq=220){
-  if(!sound)return;
-  try{
-    audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
-    const o=audioCtx.createOscillator();
-    const g=audioCtx.createGain();
-    o.frequency.value=freq;
-    o.type="sine";
-    g.gain.setValueAtTime(.0001,audioCtx.currentTime);
-    g.gain.exponentialRampToValueAtTime(.035,audioCtx.currentTime+.02);
-    g.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+.18);
-    o.connect(g);g.connect(audioCtx.destination);
-    o.start();o.stop(audioCtx.currentTime+.2);
-  }catch(e){}
+function toggleVoice(){
+voice=!voice;
+$("voiceBtn").textContent=voice?"🔊":"🔇";
+if(!voice&&speechSynthesis)speechSynthesis.cancel();
 }
 
-function toggleSound(){
-  sound=!sound;
-  showToast(sound?"🔊 Звук включён":"🔇 Звук выключен");
+function speakCurrent(){
+if(!voice||!currentStory||!window.speechSynthesis)return;
+speechSynthesis.cancel();
+
+let e=currentStory.events[currentScene];
+let text=e.text+(e.dialogue?" "+e.dialogue:"");
+
+let u=new SpeechSynthesisUtterance(text);
+u.lang="ru-RU";
+u.rate=.95;
+u.pitch=1;
+speechSynthesis.speak(u);
+
+playSound(e.action);
 }
 
-/* =========================
-   UTILS
-========================= */
+function playSound(action){
+try{
+let ctx=new(AudioContext||webkitAudioContext)();
+let osc=ctx.createOscillator();
+let gain=ctx.createGain();
 
-function esc(v){
-  return String(v)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+osc.connect(gain);
+gain.connect(ctx.destination);
+
+let freq={
+walk:170,
+run:240,
+fight:80,
+shake:55,
+reveal:420,
+talk:300,
+search:210,
+chase:250,
+final:70,
+idle:120
+}[action]||180;
+
+osc.frequency.value=freq;
+osc.type=action==="fight"?"sawtooth":"sine";
+
+gain.gain.setValueAtTime(.0001,ctx.currentTime);
+gain.gain.exponentialRampToValueAtTime(.08,ctx.currentTime+.02);
+gain.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+.25);
+
+osc.start();
+osc.stop(ctx.currentTime+.26);
+}catch(e){}
 }
 
-initGenres();
-saveDB();
+/* =========================================================
+   PROCEDURAL CINEMA
+   ========================================================= */
+
+let animationTime=0;
+
+function getCanvas(){
+return $("player").classList.contains("active")?$(
+"canvas2"):$("canvas");
+}
+
+function drawScene(){
+if(!currentStory)return;
+
+let c1=$("canvas");
+let c2=$("canvas2");
+
+drawOnCanvas(c1);
+drawOnCanvas(c2);
+
+let percent=((currentScene)/(Math.max(1,currentStory.events.length-1)))*100;
+$("progress").style.width=percent+"%";
+$("progress2").style.width=percent+"%";
+
+if($("playerInfo")){
+$("playerInfo").textContent=
+`${currentStory.title} • ${currentStory.genre} • сцена ${currentScene+1}/${currentStory.events.length}`;
+}
+}
+
+function drawOnCanvas(canvas){
+if(!canvas)return;
+
+let ctx=canvas.getContext("2d");
+let W=canvas.width,H=canvas.height;
+let e=currentStory.events[currentScene];
+
+animationTime+=.03;
+
+ctx.clearRect(0,0,W,H);
+
+let genre=currentStory.genre;
+
+let dark=["Хоррор","Мистика","Триллер","Криминал"].includes(genre);
+let bright=["Комедия","Романтика"].includes(genre);
+let future=["Фантастика"].includes(genre);
+let fantasy=["Фэнтези"].includes(genre);
+
+let sky;
+
+if(dark)sky=ctx.createLinearGradient(0,0,0,H);
+else sky=ctx.createLinearGradient(0,0,0,H);
+
+if(dark){
+sky.addColorStop(0,"#070914");
+sky.addColorStop(.55,"#171827");
+sky.addColorStop(1,"#08090e");
+}else if(future){
+sky.addColorStop(0,"#061729");
+sky.addColorStop(.6,"#102e3c");
+sky.addColorStop(1,"#05070c");
+}else if(fantasy){
+sky.addColorStop(0,"#17233b");
+sky.addColorStop(.6,"#36203e");
+sky.addColorStop(1,"#0c101b");
+}else if(bright){
+sky.addColorStop(0,"#344a6b");
+sky.addColorStop(.55,"#8d6f66");
+sky.addColorStop(1,"#20212b");
+}else{
+sky.addColorStop(0,"#172536");
+sky.addColorStop(.6,"#38424d");
+sky.addColorStop(1,"#101217");
+}
+
+ctx.fillStyle=sky;
+ctx.fillRect(0,0,W,H);
+
+/* moon/sun */
+ctx.beginPath();
+ctx.arc(W*.82,H*.18,45,0,Math.PI*2);
+ctx.fillStyle=dark?"#b8bfd0":"#f4d99a";
+ctx.fill();
+
+if(future){
+for(let i=0;i<8;i++){
+let x=(i*137+animationTime*20)%W;
+let y=80+(i*61)%250;
+ctx.fillStyle="rgba(100,200,255,.35)";
+ctx.fillRect(x,y,2,2);
+}
+}
+
+/* background buildings */
+for(let i=0;i<15;i++){
+let bw=55+(i%4)*20;
+let bh=80+(i*37)%150;
+let x=i*70-(animationTime*8%70);
+ctx.fillStyle=dark?"#0b0d16":"#171c26";
+ctx.fillRect(x,H-150-bh,bw,bh);
+
+for(let j=0;j<3;j++){
+ctx.fillStyle=chance(.5)?"#a9a26a":"#292e3a";
+ctx.fillRect(x+10+j*15,H-140-bh,7,9);
+}
+}
+
+/* ground */
+ctx.fillStyle="#080a0e";
+ctx.fillRect(0,H-150,W,150);
+
+/* road */
+ctx.fillStyle="#12151c";
+ctx.fillRect(0,H-115,W,115);
+
+for(let x=-100;x<W+100;x+=100){
+ctx.fillStyle="#b6a86e";
+ctx.fillRect(
+x-(animationTime*45%100),
+H-65,
+45,5
+);
+}
+
+/* weather */
+if(e.weather.includes("дожд")){
+for(let i=0;i<90;i++){
+let x=(i*73+animationTime*230)%W;
+let y=(i*47+animationTime*340)%H;
+ctx.strokeStyle="rgba(150,190,220,.35)";
+ctx.beginPath();
+ctx.moveTo(x,y);
+ctx.lineTo(x-8,y+24);
+ctx.stroke();
+}
+}
+
+if(e.weather.includes("снег")){
+for(let i=0;i<70;i++){
+let x=(i*91+animationTime*20)%W;
+let y=(i*53+animationTime*30)%H;
+ctx.fillStyle="rgba(255,255,255,.7)";
+ctx.beginPath();
+ctx.arc(x,y,2+(i%3),0,Math.PI*2);
+ctx.fill();
+}
+}
+
+/* fog */
+if(e.weather.includes("туман")){
+for(let i=0;i<5;i++){
+ctx.fillStyle="rgba(200,210,220,.035)";
+ctx.beginPath();
+ctx.ellipse(
+W*.2+i*180,
+H-100-(i%2)*80,
+220,55,0,0,Math.PI*2
+);
+ctx.fill();
+}
+}
+
+/* characters */
+let chars=currentStory.characters;
+let visible=Math.min(chars.length,7);
+
+for(let i=0;i<visible;i++){
+let ch=chars[i];
+
+let baseX=100+(i/(Math.max(1,visible-1)))*(W-200);
+let y=H-145;
+
+let movement=0;
+
+if(e.action==="walk"){
+movement=Math.sin(animationTime*4+i)*18;
+}
+if(e.action==="run"){
+movement=Math.sin(animationTime*8+i)*35;
+}
+if(e.action==="chase"){
+movement=Math.sin(animationTime*10+i)*50;
+}
+if(e.action==="fight"){
+movement=Math.sin(animationTime*12+i)*15;
+}
+
+let x=baseX+movement;
+
+/* shadow */
+ctx.fillStyle="rgba(0,0,0,.45)";
+ctx.beginPath();
+ctx.ellipse(x,y+5,30,9,0,0,Math.PI*2);
+ctx.fill();
+
+/* body */
+let scale=i===0?1.18:.92;
+
+ctx.save();
+ctx.translate(x,y);
+ctx.scale(scale,scale);
+
+let skin=["#e8b18b","#c98762","#f0c49d","#9e654e"][i%4];
+
+ctx.fillStyle=skin;
+ctx.beginPath();
+ctx.arc(0,-78,15,0,Math.PI*2);
+ctx.fill();
+
+/* hair */
+ctx.fillStyle=["#18141a","#3b2418","#151923","#6b472e"][i%4];
+ctx.beginPath();
+ctx.arc(0,-84,16,Math.PI,Math.PI*2);
+ctx.fill();
+
+/* torso */
+ctx.fillStyle=[
+"#4c5e88","#684f67","#3c725f","#754d40","#5d626d"
+][i%5];
+
+ctx.fillRect(-15,-63,30,48);
+
+/* legs */
+ctx.strokeStyle="#22252d";
+ctx.lineWidth=9;
+ctx.lineCap="round";
+
+let leg=Math.sin(animationTime*5+i)*9;
+
+ctx.beginPath();
+ctx.moveTo(-7,-16);
+ctx.lineTo(-11+leg,18);
+ctx.stroke();
+
+ctx.beginPath();
+ctx.moveTo(7,-16);
+ctx.lineTo(11-leg,18);
+ctx.stroke();
+
+/* arms */
+ctx.lineWidth=7;
+
+let arm=e.action==="fight"?Math.sin(animationTime*12+i)*25:0;
+
+ctx.beginPath();
+ctx.moveTo(-13,-54);
+ctx.lineTo(-27-arm,-28);
+ctx.stroke();
+
+ctx.beginPath();
+ctx.moveTo(13,-54);
+ctx.lineTo(27+arm,-28);
+ctx.stroke();
+
+/* eyes */
+ctx.fillStyle="#111";
+ctx.beginPath();
+ctx.arc(-5,-80,2,0,Math.PI*2);
+ctx.arc(5,-80,2,0,Math.PI*2);
+ctx.fill();
+
+ctx.restore();
+
+/* name */
+ctx.fillStyle="rgba(255,255,255,.8)";
+ctx.font="14px Arial";
+ctx.textAlign="center";
+ctx.fillText(ch.name.split(" ")[0],x,y+35);
+}
+
+/* action effects */
+if(e.action==="fight"){
+for(let i=0;i<20;i++){
+let x=W*.5+Math.sin(animationTime*8+i)*170;
+let y=H*.55+Math.cos(animationTime*7+i)*90;
+
+ctx.fillStyle=`rgba(255,${80+i*5},40,.7)`;
+ctx.beginPath();
+ctx.arc(x,y,2+(i%4),0,Math.PI*2);
+ctx.fill();
+}
+}
+
+if(e.action==="reveal"){
+ctx.fillStyle=`rgba(150,120,255,${.08+Math.sin(animationTime*5)*.04})`;
+ctx.fillRect(0,0,W,H);
+
+ctx.strokeStyle="rgba(170,150,255,.35)";
+ctx.lineWidth=3;
+
+for(let i=0;i<8;i++){
+ctx.beginPath();
+ctx.arc(
+W*.5,H*.45,
+80+i*18+Math.sin(animationTime*3+i)*10,
+0,Math.PI*2
+);
+ctx.stroke();
+}
+}
+
+if(e.action==="shake"){
+let s=Math.sin(animationTime*25)*5;
+ctx.save();
+ctx.translate(s,0);
+ctx.restore();
+
+ctx.fillStyle="rgba(255,255,255,.08)";
+ctx.fillRect(0,0,W,H);
+}
+
+if(e.action==="final"){
+ctx.fillStyle="rgba(255,210,120,.08)";
+ctx.fillRect(0,0,W,H);
+}
+
+/* cinematic bars */
+ctx.fillStyle="#000";
+ctx.fillRect(0,0,W,34);
+ctx.fillRect(0,H-34,W,34);
+
+/* title */
+ctx.fillStyle="rgba(255,255,255,.9)";
+ctx.font="bold 17px Arial";
+ctx.textAlign="left";
+ctx.fillText(`${currentStory.title} — ${e.title}`,22,23);
+
+ctx.font="13px Arial";
+ctx.textAlign="right";
+ctx.fillStyle="rgba(255,255,255,.65)";
+ctx.fillText(`${currentScene+1}/${currentStory.events.length}`,W-22,23);
+}
+
+/* continuous animation */
+function loop(){
+if(currentStory){
+drawScene();
+}
+requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
 renderHistory();
-
-/* Стартовая демонстрационная история не создаётся автоматически:
-   пользователь сам нажимает генерацию. */
-
 </script>
 </body>
 </html>
